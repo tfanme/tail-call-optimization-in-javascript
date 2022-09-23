@@ -148,11 +148,66 @@ const iterate5 = function () {
     console.log(result.length); // 3*3*4*3=108
 }
 
+// 回溯版本，回溯就是递归+迭代，深度+广度
+const iterate6 = function () {
+    const result = [];
+
+    const dfs = function (_str, i) {
+        // 全部遍历完了
+        if (i === s.length) {
+            result.push(_str.join(''));
+        } else {
+            const slist = s[i];
+            for (const char of slist) {
+                _str.push(char);
+                dfs(_str, i + 1);
+                _str.pop();
+            }
+        }
+    }
+
+    dfs([], 0);
+    console.log(result);
+    console.log(result.length); // 3*3*4*3=108
+}
+
 // 横向扫描
 // 纵向扫描（有点像矩阵的操作）
 
-iterate();
-iterate2();
-iterate3();
-iterate4();
-iterate5();
+// iterate();
+// iterate2();
+// iterate3();
+// iterate4();
+// iterate5();
+// iterate6();
+
+// 括号生成中的探索, 0 - (, 1 )
+const m = 3;
+const signs = ['(', ')'];
+const ans = [];
+const valid = function (combination) {
+    if (combination[0] !== '(') return false;
+    const leftCount = combination.filter(item => item === '(').length;
+    const rightCount = combination.filter(item => item === ')').length;
+    if ( leftCount > 3 || rightCount > 3 || rightCount > leftCount) return false;
+
+    return true;
+}
+// 2^(n*2)次方
+const gen = function (i, combination) {
+    if (i === m * 2) {
+        ans.push(combination.join(''))
+    } else {
+        for (const sign of signs) {
+            combination.push(sign);
+            // 增加一个条件，走不下去就不走了
+            if (valid(combination)) {
+                gen(i + 1, combination);
+            }
+            combination.pop();
+        }
+    }
+}
+
+gen(0, []);
+console.log(ans);
